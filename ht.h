@@ -101,14 +101,6 @@ public:
     // To be completed
     HASH_INDEX_T next() 
     {
-      /*
-      if (this->numProbes_ >= this->m_) {
-        return this->npos;
-      }
-      HASH_INDEX_T index = (this->start_ + this->numProbes_ * dhstep_) % this->m_;
-      this->numProbes_++;
-      return index;
-      */
       if( this->numProbes_ >= this->m_ ) {
             return this->npos; 
         }
@@ -365,27 +357,6 @@ void HashTable<K,V,Prober,Hash,KEqual>::insert(const ItemType& p)
     else {
         table_[index]->item.second = p.second;
     }
-    /*
-    double alpha = (double) size_ / table_.size();
-    if(alpha>=resizeAlpha_){
-        this->resize(); 
-    }
-    HASH_INDEX_T id= this->probe(p.first);
-    if(id!=Prober::npos){
-        if(table_[id]==nullptr){
-            size_++; realSize_++;
-            table_[id] = new HashItem(p);
-            return;
-        }else{
-            if(this->kequal_(table_[id]->item.first, p.first)){
-                table_[id]->item = p;
-                return;
-            }
-        }
-    }else{
-        throw std::logic_error("No available location");
-    }
-    */
 }
 
 // To be completed
@@ -402,21 +373,6 @@ void HashTable<K,V,Prober,Hash,KEqual>::remove(const KeyType& key)
       return;
     }
   }
-
-  /*
-  HASH_INDEX_T id = this->probe(key);
-    if(id!=Prober::npos){
-        if(table_[id]==nullptr){
-            return;
-        }else{
-            table_[id]->deleted = 1;
-            realSize_--;
-            return;
-        }
-    }else{
-        return;
-    }
-  */
 }
 
 // Complete
@@ -488,28 +444,6 @@ typename HashTable<K,V,Prober,Hash,KEqual>::HashItem* HashTable<K,V,Prober,Hash,
 template<typename K, typename V, typename Prober, typename Hash, typename KEqual>
 void HashTable<K,V,Prober,Hash,KEqual>::resize()
 {
-  /*
-    std::vector<HashItem*> temp;
-    for(size_t i = 0; i<table_.size(); i ++){
-        if(!table_[i]) continue;
-        if(table_[i]->deleted){
-            delete table_[i];
-            table_[i] = nullptr;
-        }
-        else{
-            temp.push_back(table_[i]);
-            table_[i] = nullptr;
-        }
-    }
-    totalSize_ = 0; 
-    currSize_ = 0;
-    table_.resize(CAPACITIES[++mIndex_], nullptr);
-
-    for(size_t i = 0; i < temp.size(); i++){
-        this->insert(temp[i]->item);
-        delete temp[i];
-    } 
-    */
     std::vector<HashItem*> temp;
     temp.reserve(table_.size());  
     for(size_t i = 0; i < table_.size(); ++i){
